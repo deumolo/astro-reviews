@@ -2,15 +2,14 @@
 import { actions } from "astro:actions";
  
  import MainLayout from "../../layouts/Layout.astro";
- import PlaceCard from "../../components/PlaceCard.astro";
  import { Image } from 'astro:assets';
  import Star from "../../components/Star.astro";
-
+import Availability from "../../components/Availability.astro";
  export const prerender = false;
   
  const {id} = Astro.params
  const { data} = await Astro.callAction(actions.getPlaceById, { id: Number(id) });
-const place = data.place;
+const place = data?.place;
 ---
   
 <MainLayout>
@@ -23,17 +22,15 @@ const place = data.place;
           {Array.from({ length: Number(place?.avg_rating) }).map((_) => <Star />)}
         </div>
   
-        <!-- <Availability server:defer placeId={place.id.toString()}>
+        <Availability server:defer placeId={place?.id.toString()}>
           <p
             slot="fallback"
             class="bg-gray-300 mt-5 text-center rounded-xl p-2 animate-pulse"
           >
             Espere
           </p>
-        </Availability> -->
-  
-        <!-- <p class="bg-blue-300 mt-5 text-center rounded-xl p-2">Disponibles</p>
-        <p class="bg-red-300 mt-5 text-center rounded-xl p-2">No Disponible</p> -->
+        </Availability>
+
       </div>
   
       <div>

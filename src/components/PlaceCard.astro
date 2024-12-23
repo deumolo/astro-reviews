@@ -1,40 +1,45 @@
 ---
-interface Props {}
+import { Image } from "astro:assets";
+
+import type { Place } from "@prisma/client";
+
+interface Props {
+  place: Place;
+}
 
 import Star from "./Star.astro";
+
+const { place } = Astro.props;
+const { title, description, image, avg_rating } = place;
 ---
 
 <!-- component --><!-- This is an example component -->
 <div class="max-w-2xl mx-auto">
-  <div
-    class="shadow-md rounded-lg max-w-sm bg-gray-800 border-gray-700"
-  >
+  <div class="shadow-md rounded-lg max-w-sm bg-gray-800 border-gray-700">
     <a href="#">
-      <img
-		class="pb-5 rounded-lg overflow-hidden"
-        src="https://i.ibb.co/KqdgGY4/cosmetic-packaging-mockup-1150-40280.webp"
-        alt="product image"
+      <Image
+        class="pb-5 rounded-lg overflow-hidden"
+        src=`/assets/images/${image}`
+        alt={title}
+        width="500"
+        height="500"
       />
     </a>
     <div class="px-5 pb-5">
-      <a href="#">
-        <h3
-          class="font-semibold text-xl tracking-tight text-white"
-        >
-          Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
-        </h3>
-      </a>
+      <h3 class="font-semibold text-xl tracking-tight text-white">
+        {title}
+      </h3>
       <div class="flex items-center mt-2.5 mb-5">
         <div class="flex flex-1">
-          <Star />
-          <Star />
-          <Star />
-          <Star />
-          <Star />
+          {
+            Array.from({ length: Number(place.avg_rating) }).map((_) => (
+              <Star />
+            ))
+          }
         </div>
         <span
-          class=" text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-200 text-blue-800 ml-3"
-          >5.0</span
+          class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-200 text-blue-800 ml-3"
+          >{avg_rating}</span
         >
       </div>
     </div>
